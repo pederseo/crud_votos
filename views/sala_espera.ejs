@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sala de Espera</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* Estilo para la imagen de fondo */
+    body {
+      background-image: url('https://i.pinimg.com/originals/12/ba/7b/12ba7b2a984fb35fd91f5e173b906ff9.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body class="h-screen flex items-center justify-center">
+
+  <div class="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg text-center max-w-sm mx-auto">
+    <h1 class="text-2xl font-semibold mb-4">Sala de Espera</h1>
+    <p class="text-gray-700">Espera a que todos terminen enviar sus respuestas</p>
+  </div>
+  <script>
+    setInterval(() => {
+      window.location.href = '/join_jugadores';
+    }, 6000); // 3000 milisegundos = 3 segundos
+  </script>  
+</body>
+</html>

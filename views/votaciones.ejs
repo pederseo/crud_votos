@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¿Quién crees que es el impostor?</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <div class="container mx-auto mt-10">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">¿Quién crees que es el impostor?</h1>
+    
+    <div class="overflow-x-auto">
+      <table id="votacionesTable" class="min-w-full bg-white border border-gray-300 shadow-md rounded-lg">
+        <thead>
+          <tr>
+            <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-gray-600">Jugador</th>
+            <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-gray-600">Respuesta</th>
+            <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-gray-600">Votos</th>
+            <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-gray-600">Votar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% Object.entries(jugadores).forEach(([nombre, datos]) => { %>
+          <tr class="border-b border-gray-300" data-jugador="<%= nombre %>">
+            <td class="py-4 px-6 text-gray-800"><%= nombre %></td>
+            <td class="py-4 px-6 text-gray-800"><%= datos.respuesta %></td>
+            <td class="py-4 px-6 text-gray-800 votos"><%= datos.votos %></td>
+            <td class="py-4 px-6">
+              <button onclick="votar('<%= nombre %>')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Votar</button>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Función para enviar el voto usando fetch sin recargar la página
+    async function votar(jugador) {
+      try {
+        const response = await fetch('/votar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ jugador })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          actualizarVotaciones(data);
+        } else {
+          console.error('Error al votar');
+        }
+      } catch (error) {
+        console.error('Error en la solicitud:', error);
+      }
+    }
+
+    // Función para actualizar la tabla de votaciones
+    function actualizarVotaciones(data) {
+      Object.entries(data.jugadores).forEach(([nombre, datos]) => {
+        const fila = document.querySelector(`tr[data-jugador="${nombre}"]`);
+        if (fila) {
+          fila.querySelector('.votos').textContent = datos.votos;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
